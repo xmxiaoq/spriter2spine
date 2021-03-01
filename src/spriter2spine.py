@@ -1011,7 +1011,7 @@ def main(in_path, out_path):
                 continue
             in_file = os.path.join(root, f)
             out_file = os.path.splitext(f)[0]
-            out_file = get_out_file(in_file)  # xq
+            # out_file = get_out_file(in_file)  # xq add
             print(in_file, out_file)
             convert(in_file, out_folder, out_file)
 
@@ -1027,6 +1027,6 @@ if __name__ == '__main__':
                         help='Directory or File convert to. By default, point to the current directory.')
     args = parser.parse_args()
 
-    # main(args.in_path or './', args.out_path or './')
-    main(args.in_path or r"""E:\BaiduNetdiskDownload\2D\Character\2003291""",
-         args.out_path or r"""E:\BaiduNetdiskDownload\2D\Character\2003291""")
+    main(args.in_path or './', args.out_path or './')
+    # main(args.in_path or r"""E:\BaiduNetdiskDownload\2D\Character\2003291""",
+    #      args.out_path or r"""E:\BaiduNetdiskDownload\2D\Character\2003291""")
