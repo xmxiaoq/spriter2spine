@@ -7,6 +7,7 @@ import sys
 import os
 import re
 import argparse
+import errno
 
 # spine file extension
 SPINE_EXT = 'json'
@@ -290,7 +291,7 @@ def extract_bone_data(bones, entity, folder_file_map, bone_init_info, ani_timeli
         if not result:
             print('[WARNING] Unsupported bone hierarchy animation: entity name(%s) ani name(%s) %s' % (
                 entity['name'], ani['name'], reason))
-            return False
+            # return False // xq
 
         timeline_obj_key = {}
         ani_timeline_obj_key[ani['name']] = timeline_obj_key
@@ -865,7 +866,10 @@ def extract_animations(anis, slots, skins, entity, folder_file_map, bone_init_in
                     sy = kfrm['scaley'] == None and 1 or kfrm['scaley']
 
                     while p in bone_init_info:
-                        states = bone_time_state[p]
+                        states = bone_time_state.get(p)
+                        if not states:
+                            break
+
                         psx, psy = find_scales_in_keyfrm_state(
                             time, states, bone_init_info[p]['osx'], bone_init_info[p]['osy'])
 
@@ -932,8 +936,7 @@ def output_entity2spine(entity, folder_file_map, out_folder, out_name):
     extract_animations(spine_obj['animations'], spine_obj['slots'], spine_obj['skins']
                        [0]['attachments'], entity, folder_file_map, bone_init_info, ani_timeline_obj_key)
 
-    # file_name = "%s-%s.%s" % (out_name, entity['name'], SPINE_EXT)
-    file_name = "%s.%s" % (out_name, SPINE_EXT)
+    file_name = "%s-%s.%s" % (out_name, entity['name'], SPINE_EXT)
     output_path = os.path.join(out_folder, file_name)
     write_json(spine_obj, output_path)
     print('[INFO] Converted entity: %s to %s' % (entity['name'], output_path))
@@ -1028,5 +1031,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     main(args.in_path or './', args.out_path or './')
-    # main(args.in_path or r"""E:\BaiduNetdiskDownload\2D\Character\2003291""",
-    #      args.out_path or r"""E:\BaiduNetdiskDownload\2D\Character\2003291""")
+    # main(args.in_path or r"""E:\Dev\craftpix\fish-crab-jellyfish-and-shark-2d-game-sprites\SCML\Fish, crab, jellyfish, shark.scml""",
+    #      args.out_path or r"""E:\Dev\craftpix\fish-crab-jellyfish-and-shark-2d-game-sprites\SCML""")
