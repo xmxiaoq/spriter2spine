@@ -936,7 +936,8 @@ def output_entity2spine(entity, folder_file_map, out_folder, out_name):
     extract_animations(spine_obj['animations'], spine_obj['slots'], spine_obj['skins']
                        [0]['attachments'], entity, folder_file_map, bone_init_info, ani_timeline_obj_key)
 
-    file_name = "%s-%s.%s" % (out_name, entity['name'], SPINE_EXT)
+    # file_name = "%s-%s.%s" % (out_name, entity['name'], SPINE_EXT)
+    file_name = "%s.%s" % (out_name, SPINE_EXT)
     output_path = os.path.join(out_folder, file_name)
     write_json(spine_obj, output_path)
     print('[INFO] Converted entity: %s to %s' % (entity['name'], output_path))
@@ -996,12 +997,6 @@ def main(in_path, out_path):
 
         convert(in_path, out_path, file_name)
 
-    # for root, dirs, files in os.walk(in_path):
-    #     for f in files:
-    #         if f.lower().endswith('.json'):
-    #             in_file = os.path.join(root, f)
-    #             os.remove(in_file)
-
     for root, dirs, files in os.walk(in_path):
         out_folder = os.path.join(out_path, re.sub(
             r'^[\\/]', '', root.replace(in_path, '')))
@@ -1014,7 +1009,6 @@ def main(in_path, out_path):
                 continue
             in_file = os.path.join(root, f)
             out_file = os.path.splitext(f)[0]
-            # out_file = get_out_file(in_file)  # xq add
             print(in_file, out_file)
             convert(in_file, out_folder, out_file)
 
